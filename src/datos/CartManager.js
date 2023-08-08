@@ -5,52 +5,46 @@ class CartManager{
         this.path = 'carrito.json'
     }
 
-    async getNewId(newCode) {
-        return newCode + 1
+    async getAllCarts(){
+        if(fs.existsSync(this.path)){
+            const carts = await fs.promises.readFile(this.path, 'utf-8')
+            return JSON.parse(carts)
+        } else{
+            return []
+        }
     }
 
-    async getCart(productos){
-        let carritos 
-        try {
-            let contenido = await fs.promises.readFile(this.path)
-            productos = JSON.parse(contenido)
-        } catch (error) {
-            console.log(error)
-        }
-        return carritos
+    async getCart(id){
+        const carts = await this.getAllCarts()
+        const cart = carts.find(c=>c.id === id)
+        return cart
     }
 
-    async addProductToCart(pid, cid){
-        let carrito
-        let carritos = await this.getCart()
-        let index = carritos.findIndex(cart => cart.id == cid)
-        if(index == -1){
-            return carrito
+    async addProductToCart(cid, pid){
+        const carts = await this.getAllCarts()
+        const cart = carts.find(c=>c.id===cid)
+        const productIndex = cart.products.findIndex(p=>p.product===pid)
+        if (productIndex===-1) {
+            cart.products.push({product:pid, quantity:1})
+        } else {
+            cart.products[productIndex].quantity++
         }
-
-        carritos[index].products.push(pid)
-        try {
-            await fs.promises.writeFile(this.path, JSON.stringify(carritos))
-        } catch (error) {
-            console.log(error)
-            throw error
-        }
+        await fs.promises.writeFile(this.path,JSON.stringify(carts))
+        return cart
     }
 
     async createCart(){
-        let newCart = {
-            id:this.getNewId(),
-            products: []
-        }
-        let carritos = await this.getCart()
-        carritos.push(newCart)
-        try {
-            await fs.promises.writeFile(this.path,JSON.stringify(carritos))
-        } catch (error) {
-            console.log(error)
-            throw error
+        const carts = await this.getAllCarts()
+        let id 
+        if (!carts.length) {
+            id = 1
+        } else {
+            id = carts[carts.length - 1].id + 1
         }
 
+        const newCart = {products: [], id}
+        carts.push(newCart)
+        await fs.promises.writeFile(this.path, JSON.stringify(carts))
         return newCart
     }
     

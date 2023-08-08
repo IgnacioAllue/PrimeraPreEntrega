@@ -55,7 +55,7 @@ export class ProductManager {
             productos[indice].stock = fields.stock
             productos[indice].category = fields.category
             productos[indice].status = fields.status
-            productos[indice.thumbnail = fields.thumbnail]
+            productos[indice.thumbnail] = fields.thumbnail 
             
             producto = productos[indice]
             await fs.promises.writeFile(this.path, JSON.stringify(productos))
