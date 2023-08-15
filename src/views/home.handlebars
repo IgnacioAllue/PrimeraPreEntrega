@@ -1,8 +1,10 @@
-<h1>Real Time Products</h1>
-<form id="formulario">
-    <input type="text" name="product" id="product">
-    <input type="submit" value="Enviar">
-</form>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="/public/js/index.js"></script>
+{{#each allProducts}}
+<ul>
+    <li>{{this.title}}</li>
+    <li>{{this.description}}</li>
+    <li>{{this.price}}</li>
+    <li>{{this.code}}</li>
+    <li>{{this.category}}</li>
+    <li>{{this.stock}}</li>
+</ul>
+{{/each}}
