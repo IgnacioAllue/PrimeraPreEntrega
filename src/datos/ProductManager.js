@@ -1,81 +1,64 @@
-import fs from "fs"
+import { productsModel } from "../db/models/products.models.js"
 
-export class ProductManager { 
-
-    constructor () {
-        this.path = 'products.json'
-    }
-
-    async getNewId(newCode) {
-        return newCode + 1
-    }
+class ProductManager { 
     
 
-    async addProduct(product){
+    async getProducts(){
         try {
-            let products = await this.getProducts()
-            let newCode = products.length
-            product.id = newCode
-            products.push(product)
-            await fs.promises.writeFile(this.path, JSON.stringify(products))
+            const result = await productsModel.paginate({},{limit:10})
+            const info = {
+                count: result.totalDocs,
+                pages: result.totalPages,
+                next: result.hasNextPage
+                    ?   `http://localhost:8080/api/products?page=${result.nextPage}`
+                    :   null,
+                prev: result.hasPrevPage
+                    ?   `http://localhost:8080/api/products?page=${result.prevPage}`
+                    :   null
+            }
+            return {info, results: result.docs}
         } catch (error) {
-            console.log(error)
-            throw error
+            return error
         }
     }
 
-    async getProducts(){
-        let products
+    async createProduct(obj){
         try {
-            let contenido = await fs.promises.readFile(this.path)
-            products = JSON.parse(contenido)
+            const newProduct = await productsModel.create(obj)
+            return newProduct
         } catch (error) {
-            console.log(error)
+            return error
         }
-        return products
     }
 
     async getProductById(id){
-        let producto
-        let products = await this.getProducts()
-        producto = products.find(products => products.id ==id)
-        return producto
-    }
-
-    async updateProducts(pid, fields){
-        let producto
         try {
-            let productos = await this.getProducts()
-            let indice = productos.findIndex(product => product.id == pid)
-            if(indice == -1){
-                return producto
-            }
-            productos[indice].title = fields.title
-            productos[indice].description = fields.description
-            productos[indice].stock = fields.stock
-            productos[indice].category = fields.category
-            productos[indice].status = fields.status
-            productos[indice.thumbnail] = fields.thumbnail 
-            
-            producto = productos[indice]
-            await fs.promises.writeFile(this.path, JSON.stringify(productos))
+            const product = await productsModel.findById(id)
+            return product
         } catch (error) {
-            console.log(error)
-            throw error
+            return error
         }
-        return producto
     }
 
-    async deleteProduct(pid){
 
+    async deleteProduct(id){
         try {
-            let productos = await this.getProducts()
-            let indice = productos.filter(product => product.id !== pid)
-            await fs.promises.writeFile(this.path, JSON.stringify(indice))
+            const deleteProduct = await productsModel.findByIdAndDelete(id)
+            return deleteProduct
         } catch (error) {
-            console.log(error)
+            return error
+        }
+    }
+
+    async add(products){
+        try {
+            await productsModel.create(products)
+            return 'Products added'
+        } catch (error) {
             return error
         }
     }
 }
+
+export const productsManager = new ProductManager()
 

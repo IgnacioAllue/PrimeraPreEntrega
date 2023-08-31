@@ -1,55 +1,64 @@
-import fs from 'fs'
+import { cartsModel } from "../db/models/carts.models.js";
 
-class CartManager{
-    constructor(){
-        this.path = 'carrito.json'
-    }
-
-    async getAllCarts(){
-        if(fs.existsSync(this.path)){
-            const carts = await fs.promises.readFile(this.path, 'utf-8')
-            return JSON.parse(carts)
-        } else{
-            return []
-        }
-    }
-
-    async getCart(id){
-        const carts = await this.getAllCarts()
-        const cart = carts.find(c=>c.id === id)
-        return cart
-    }
-
-    async addProductToCart(cid, pid){
-        const carts = await this.getAllCarts()
-        const cart = carts.find(c=>c.id===cid)
-        const productIndex = cart.products.findIndex(p=>p.product===pid)
-        if (productIndex===-1) {
-            cart.products.push({product:pid, quantity:1})
-        } else {
-            cart.products[productIndex].quantity++
-        }
-        await fs.promises.writeFile(this.path,JSON.stringify(carts))
-        return cart
-    }
-
-    async createCart(){
-        const carts = await this.getAllCarts()
-        let id 
-        if (!carts.length) {
-            id = 1
-        } else {
-            id = carts[carts.length - 1].id + 1
-        }
-
-        const newCart = {products: [], id}
-        carts.push(newCart)
-        await fs.promises.writeFile(this.path, JSON.stringify(carts))
-        return newCart
-    }
+class CartManager {
     
+    async getCarts() {
+        try {
+            const carts = await cartsModel.find({})
+            return carts
+        } catch (error) {
+            return error
+        }
+    }
 
-    
+    async createCart(obj) {
+        try {
+            const cart = await cartsModel.create(obj)
+            return cart
+        } catch (error) {
+            return error
+        }
+    }
+
+    async getCartById(id){
+        try {
+            const cart = await cartsModel.findById(id)
+            return cart
+        } catch (error) {
+            return error
+        }
+    }
+
+    async updateOne(id, obj){
+        try {
+            const updateCart = await cartsModel.updateOne({ _id: id},{ ...obj })
+            return updateCart
+        } catch (error) {
+            return error
+        }
+    }
+
+    async deleteOne(id){
+        try {
+            const deleteCart = await cartsModel.findByIdAndDelete(id)
+            return deleteCart
+        } catch (error) {
+            return error
+        }
+    }
+
+
+    async deleteProduct(cid,pid){
+        try {
+            const cart = await cartsModel.findById(cid)
+            if(!cart) throw new Error('cart not found')
+
+            const response = await cartsModel.updateOne({_id:cid}, {$pull:{products:pid}})
+        return response
+        } catch (error) {
+            return error
+        }
+    }
 }
 
-export default CartManager
+export const cartManager = new CartManager()
