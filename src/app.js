@@ -6,7 +6,6 @@ import handlebars from 'handlebars'
 import { __dirname } from './utils.js'
 import './db/dbConfig.js'
 import MongoStore from 'connect-mongo'
-import mongoose from 'mongoose'
 import sessionRouter from './routes/sessions.router.js'
 import viewsRouter from './routes/views.router.js'
 
