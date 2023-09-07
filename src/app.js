@@ -2,7 +2,7 @@ import express from 'express'
 import session from 'express-session'
 import router from './routes/products.router.js'
 import cartRouter from './routes/carts.router.js'
-import handlebars from 'handlebars'
+import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
 import './db/dbConfig.js'
 import MongoStore from 'connect-mongo'
@@ -19,11 +19,10 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
-
 app.use(
     session({
       store: new MongoStore({
-        mongoUrl: MONGO,
+        mongoUrl: 'mongodb+srv://ignacioallue:Monje1@cluster0.0f3tu6m.mongodb.net/Proyecto1?retryWrites=true&w=majority',
         ttl: 40,
       }),
       secret: "CoderSecret",
@@ -34,7 +33,7 @@ app.use(
 
 app.use('/api/products', router);
 app.use('/api/carts', cartRouter)
-app.use('/views', viewsRouter)
+app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter)
 
 
