@@ -1,6 +1,6 @@
 import express from 'express'
 import session from 'express-session'
-import router from './routes/products.router.js'
+import productsRouter from './routes/products.router.js'
 import cartRouter from './routes/carts.router.js'
 import handlebars from 'express-handlebars'
 import { __dirname } from './utils.js'
@@ -31,7 +31,7 @@ app.use(
     })
   )
 
-app.use('/api/products', router);
+app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter)
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter)

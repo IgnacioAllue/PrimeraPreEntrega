@@ -4,7 +4,7 @@ const router = Router();
 
 
 const publicAcces = (req,res,next) =>{
-    if(req.session.user) return res.redirect('/profile');
+    if(req.session.user) return res.redirect('/productos');
     next();
 }
 
@@ -22,7 +22,7 @@ router.get('/login', publicAcces, (req,res)=>{
     res.render('login')
 })
 
-router.get('/profile', privateAcces ,(req,res)=>{
+router.get('/productos', privateAcces ,(req,res)=>{
     res.render('profile',{
         user: req.session.user
     })
