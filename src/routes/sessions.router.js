@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import userModel from '../db/models/user.model.js';
+import { hashData } from '../utils.js';
+import passport from 'passport';
 
 const router = Router();
 
@@ -15,7 +17,8 @@ router.post('/register', async (req, res) =>{
         first_name, last_name, email, age, password, role:'usuario'
     };
 
-    const result = await userModel.create(user);
+    const hashPassword = await hashData(password)
+    const result = await userModel.create({...user, password:hashPassword});
     res.send({status:"succes", message:"User registered"});
 
 })
@@ -44,5 +47,18 @@ router.get('/logout', (req,res)=>{
         res.redirect('/login');
     })
 })
+
+router.get(
+    "/githubSignup",
+    passport.authenticate("github", { scope: ["user:email"] })
+)
+  
+router.get(
+        "/github",
+        passport.authenticate("github", {
+        failureRedirect: "/api/loin",
+        successRedirect: "/api/views/home",
+    })
+)
 
 export default router;
