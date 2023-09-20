@@ -56,7 +56,7 @@ router.get(
 router.get(
         "/github",
         passport.authenticate("github", {
-        failureRedirect: "/api/loin",
+        failureRedirect: "/api/login",
         successRedirect: "/api/views/home",
     })
 )
