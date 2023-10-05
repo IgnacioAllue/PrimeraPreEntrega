@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productsManager } from "../datos/ProductManager.js";
+import { productsManager } from "../DAL/ProductManager.js";
 import fs from 'fs'
 import { __dirname } from "../utils.js";
 

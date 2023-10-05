@@ -9,6 +9,7 @@ import MongoStore from 'connect-mongo'
 import sessionRouter from './routes/sessions.router.js'
 import viewsRouter from './routes/views.router.js'
 import passport from 'passport'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -20,20 +21,24 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(cookieParser())
 
 app.use(
   session({
     store: new MongoStore({
       mongoUrl: 'mongodb+srv://ignacioallue:Monje1@cluster0.0f3tu6m.mongodb.net/Proyecto1?retryWrites=true&w=majority',
-      ttl: 40,
+      ttl: 60*5,
     }),
     secret: "CoderSecret",
+    cookie: {maxAge:60000},
     resave: false,
     saveUninitialized: false,
   })
 )
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter)

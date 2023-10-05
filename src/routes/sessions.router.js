@@ -19,13 +19,13 @@ router.post('/register', async (req, res) =>{
 
     const hashPassword = await hashData(password)
     const result = await userModel.create({...user, password:hashPassword});
-    res.send({status:"succes", message:"User registered"});
+    res.send({status:"success", message:"User registered"});
 
 })
 
 router.post('/login', async (req,res)=>{
     const { email, password } = req.body;
-    const user = await userModel.findOne({email,password})
+    const user = await userModel.findOne({email})
 
     if(!user){
         return res.status(400).send({status:"error", error:"Datos incorrectos"})
@@ -48,16 +48,12 @@ router.get('/logout', (req,res)=>{
     })
 })
 
-router.get(
-    "/githubSignup",
-    passport.authenticate("github", { scope: ["user:email"] })
+router.get('/githubSignup', passport.authenticate('github', { scope: ['user:email'] })
 )
   
-router.get(
-        "/github",
-        passport.authenticate("github", {
-        failureRedirect: "/api/login",
-        successRedirect: "/api/views/home",
+router.get('/github', passport.authenticate('github', {
+        failureRedirect: '/api/login',
+        successRedirect: '/productos',
     })
 )
 

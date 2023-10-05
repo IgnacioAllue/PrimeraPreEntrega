@@ -2,7 +2,7 @@ import passport from "passport";
 import userModel from "../db/models/user.model.js";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as LocalStrategy } from "passport-local";
-import { userManager } from "../datos/UsersManager.js";
+import { userManager } from "../DAL/UsersManager.js";
 
 passport.use('login',new LocalStrategy(
     async function(email, done){
@@ -21,7 +21,7 @@ passport.use('login',new LocalStrategy(
 passport.use(new GithubStrategy({
     clientID: 'Iv1.45e8ca69d5232da1',
     clientSecret: 'fe78faf41f1f7f6244997461f3e17ba0de842ff0',
-    callbackURL: "http://localhost:8080/api/users/github"
+    callbackURL: "http://localhost:8080/api/login/github"
     },
     async function(accessToken,refreshToken,profile,done){
         try {
