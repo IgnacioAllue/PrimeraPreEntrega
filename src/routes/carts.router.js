@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { cartsModel } from "../models/carts.models.js";
-import { cartManager } from "../DAL/CartManager.js";
+import { cartsModel } from "../DAO/models/carts.models.js";
+import { cartManager } from "../controllers/CartManager.js";
 const cartRouter = Router()
 
 cartRouter.get('/', async (req,res) => {
