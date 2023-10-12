@@ -1,13 +1,13 @@
 import passport from "passport";
-import userModel from "../db/models/user.model.js";
+import userModel from "../DAO/models/user.model.js";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as LocalStrategy } from "passport-local";
-import { userManager } from "../DAL/UsersManager.js";
+import { usersManager } from '../controllers/UsersManager.js'
 
 passport.use('login',new LocalStrategy(
     async function(email, done){
         try {
-            const userDB = await userManager.findUser(email)
+            const userDB = await usersManager.findUser(email)
             if(!userDB){
                 return done(null,false)
             }
@@ -25,7 +25,7 @@ passport.use(new GithubStrategy({
     },
     async function(accessToken,refreshToken,profile,done){
         try {
-            const userDB = await userManager.findUser(profile.mail)
+            const userDB = await usersManager.findUser(profile.username)
             if (userDB) {
                 return done(null,false)
             }
@@ -35,7 +35,7 @@ passport.use(new GithubStrategy({
             username: profile.username,
             password: ' '
         }
-        const result = await userManager.create(newUser)
+        const result = await usersManager.create(newUser)
         return done(null,result)
         } catch (error) {
             done(error)
@@ -51,7 +51,7 @@ passport.serializeUser((user,done)=>{
 passport.deserializeUser(async(id,done) => {
     try {
         const usuario = await userModel.findById(id)
-        done(null,user)
+        done(null,usuario)
     } catch (error) {
         done(error)
     }

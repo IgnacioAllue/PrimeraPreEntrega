@@ -52,9 +52,8 @@ router.get('/githubSignup', passport.authenticate('github', { scope: ['user:emai
 )
   
 router.get('/github', passport.authenticate('github', {
-        failureRedirect: '/api/login',
-        successRedirect: '/productos',
-    })
-)
+    failureRedirect: '/login', 
+    successRedirect: '/productos',
+}));
 
 export default router;

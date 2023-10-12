@@ -10,6 +10,7 @@ import sessionRouter from './routes/sessions.router.js'
 import viewsRouter from './routes/views.router.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
+import './passport/passportStrategies.js'
 
 const app = express()
 
@@ -21,7 +22,7 @@ app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
-app.use(cookieParser())
+app.use(cookieParser('secretKeyCookies'))
 
 app.use(
   session({
