@@ -64,14 +64,19 @@ cartRouter.delete('/:cid/products/pid', async(req,res)=> {
 })
 
 cartRouter.get("/:cid/purchase", async (req,res) => {
-    const mail = {
-        from: "Ecommerce",
-        to: "ignacioaallue@gmail.com",
-        subject: "Ticket de compra",
-        text: "My first message"
+    try {
+        const newTicket = await cartManager.createTicket(req.body)
+        const mail = {
+            from: "Ecommerce",
+            to: "ignacioaallue@gmail.com",
+            subject: "Ticket de compra",
+            text: "My first message"
+        }
+        await transporter.sendMail(mail)
+        res.status(200).json({message:'Ticket created', cart: newTicket})
+    } catch (error) {
+        res.status(500).json({error})
     }
-    await transporter.sendMail(mail)
-    res.send("mail send")
 })
 
 export default cartRouter

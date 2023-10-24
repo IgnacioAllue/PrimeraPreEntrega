@@ -1,4 +1,5 @@
 import { cartsModel } from "../DAO/models/carts.models.js";
+import { ticketModel } from "../DAO/models/ticket.models.js";
 
 class CartManager {
     
@@ -55,6 +56,15 @@ class CartManager {
 
             const response = await cartsModel.updateOne({_id:cid}, {$pull:{products:pid}})
         return response
+        } catch (error) {
+            return error
+        }
+    }
+
+    async createTicket (){
+        try {
+            const ticket = await ticketModel.create(obj)
+            return ticket
         } catch (error) {
             return error
         }

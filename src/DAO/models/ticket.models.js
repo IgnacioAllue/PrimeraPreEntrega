@@ -9,9 +9,17 @@ const ticketSchema = new mongoose.Schema({
     puchase_datetime: {
         type: Number,
     },
-    amount: {
-        type: Number
-    },
+    Cart: [
+        {
+            id:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Cart'
+            },
+            quantity:{
+                type: Number
+            }
+        }
+    ],
     puchaser: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "user"
