@@ -11,6 +11,7 @@ import viewsRouter from './routes/views.router.js'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import './passport/passportStrategies.js'
+import config from './config.js'
 
 const app = express()
 
@@ -47,7 +48,7 @@ app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter)
 
 
-const PORT = 8080
+const PORT = config.port
 const httpServer = app.listen(PORT, () => console.log(`Server running on port ${httpServer.address().port}`))
 httpServer.on('error', error => console.log(error))
 

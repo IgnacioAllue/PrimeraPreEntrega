@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { cartsModel } from "../DAO/models/carts.models.js";
 import { cartManager } from "../controllers/CartManager.js";
+import { transporter } from "../nodemailer.js";
+import hbs from "nodemailer-express-handlebars"
+import { ticketModel } from "../DAO/models/ticket.models.js";
 const cartRouter = Router()
 
 cartRouter.get('/', async (req,res) => {
@@ -59,6 +61,17 @@ cartRouter.delete('/:cid/products/pid', async(req,res)=> {
     } catch (error) {
         res.status(500).json({error})
     }
+})
+
+cartRouter.get("/:cid/purchase", async (req,res) => {
+    const mail = {
+        from: "Ecommerce",
+        to: "ignacioaallue@gmail.com",
+        subject: "Ticket de compra",
+        text: "My first message"
+    }
+    await transporter.sendMail(mail)
+    res.send("mail send")
 })
 
 export default cartRouter
