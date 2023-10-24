@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { cartManager } from "../controllers/CartManager.js";
 import { transporter } from "../nodemailer.js";
-import hbs from "nodemailer-express-handlebars"
-import { ticketModel } from "../DAO/models/ticket.models.js";
 const cartRouter = Router()
 
 cartRouter.get('/', async (req,res) => {

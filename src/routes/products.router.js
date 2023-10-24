@@ -44,11 +44,5 @@ router.delete('/:id', async(req,res) => {
     }
 })
 
-//const path = __dirname+'/Products.json'
-//router.get('/add', async (req,res) => {
-//    const productData = await fs.promises.readFile(path, 'utf-8')
-//    await productsManager.add(JSON.parse(productData))
-//    res.json({message:'productos agregados'})
-//})
 
 export default router

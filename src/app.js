@@ -12,6 +12,7 @@ import passport from 'passport'
 import cookieParser from 'cookie-parser'
 import './passport/passportStrategies.js'
 import config from './config.js'
+import mockingRouter from './routes/mocking.router.js'
 
 const app = express()
 
@@ -46,7 +47,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/carts', cartRouter)
 app.use('/', viewsRouter)
 app.use('/api/session', sessionRouter)
-
+app.use('/api/mockingproducts', mockingRouter)
 
 const PORT = config.port
 const httpServer = app.listen(PORT, () => console.log(`Server running on port ${httpServer.address().port}`))
