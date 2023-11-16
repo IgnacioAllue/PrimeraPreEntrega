@@ -1,0 +1,13 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+       -Products
+      responses:
+        "200"
+        description: Todos los productos fueron encontrados
+        "401"
+        description: No Permitido
+        "500"
+        descrition: Error

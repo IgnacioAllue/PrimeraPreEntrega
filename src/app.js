@@ -13,6 +13,8 @@ import cookieParser from 'cookie-parser'
 import './passport/passportStrategies.js'
 import config from './config.js'
 import mockingRouter from './routes/mocking.router.js'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUiExpress from "swagger-ui-express"
 
 const app = express()
 
@@ -50,6 +52,18 @@ app.use('/api/session', sessionRouter)
 app.use('/api/mockingproducts', mockingRouter)
 
 const PORT = config.port
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+    title: "Documentacion",
+    description: "Productos"}
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`]
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use("/api/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
 const httpServer = app.listen(PORT, () => console.log(`Server running on port ${httpServer.address().port}`))
 httpServer.on('error', error => console.log(error))
 
